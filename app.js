@@ -2,8 +2,11 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const Listing = require("./models/listing.js");
+const path = require("path");
+// const ejs = require("ejs");
 
-
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "/views"));
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 
 main()
@@ -33,6 +36,12 @@ app.get("/testlisting",async (req,res)=>{
     await sampleListing.save();
     console.log(" sample was saved");
     res.send("successful testing");
+})
+
+app.get("/listing",async (req,res)=>{
+    const allListings = await Listing.find({});
+    // console.log(allListing)
+    res.render("listings/index.ejs",{allListings});
 })
 
 app.listen(8080, ()=>{
