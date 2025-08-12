@@ -3,6 +3,7 @@ const app = express();
 const mongoose = require("mongoose");
 const Listing = require("./models/listing.js");
 const path = require("path");
+const { render } = require("ejs");
 // const ejs = require("ejs");
 
 app.set("view engine", "ejs");
@@ -40,19 +41,36 @@ app.get("/testlisting",async (req,res)=>{
 })
 
 //index Route
-app.get("/listing",async (req,res)=>{
+app.get("/listings",async (req,res)=>{
     const allListings = await Listing.find({});
     // console.log(allListing)
     res.render("listings/index.ejs",{allListings});
 })
 
+
+//new Route
+app.get("/listings/new",(req,res)=>{
+    res.render("listings/new.ejs");
+    // console.log("new request");
+})
+
 //Show Route
 
-app.get("/listing/:id", async (req,res)=>{
+app.get("/listings/:id", async (req,res)=>{
     let {id} = req.params;
     const listing = await Listing.findById(id);
     res.render("listings/show.ejs",{listing});
+    // console.log(listing);
+})
+
+//Create Route
+app.post("/listings", async (req,res)=>{
+    // let {title,description,image,price,location,country} = req.body;
+    let listing = req.body.listing;
     console.log(listing);
+    let newListing = new Listing(listing);
+    await newListing.save()
+    res.redirect("/listings")
 })
 
 app.listen(8080, ()=>{
