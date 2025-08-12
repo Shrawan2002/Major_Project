@@ -49,3 +49,27 @@
     justify-content: center;
     justify-content: space-evenly;
 }
+
+/* Cards */
+.card{
+    border: none !important;
+    margin-bottom: 2rem;
+}
+
+.card-img-top{
+    border-radius: 1rem;
+    width: 100% !important;
+    object-fit: cover !important;
+}
+
+.card-body{
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.card-text{
+    font-weight: 400;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+

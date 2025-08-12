@@ -4,18 +4,17 @@
     <!-- <form method="GET" action="/listings/new">
         <button>Create New Listing</button>
     </form> -->
-    <div class="row row-col-lg-3">
+    <div class="row row-cols-lg-3 row-cols-md-3 row-cols-sm-1">
         <% for(let listing of allListings) { %>
        <div class="card col" style="width: 20rem;">
         <img src="<%= listing.image.url %>" class="card-img-top" alt="listings_image">
        <div class="card-body">
        <p class="card-text"><%= listing.title %></p>
-       <br>
        <p class="card-text">
         <%= Number(listing.price).toLocaleString("en-IN",{style:"currency",currency:"INR"}) %> / night
        </p>
        </div>
-       </div>
+    </div>
        <% } %>
     </div>
    
