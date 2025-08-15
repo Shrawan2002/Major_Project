@@ -9,7 +9,7 @@ body{
     font-family: "Plus Jakarta Sans", sans-serif !important;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    min-height: 100vh !important;
 }
 .container{
     flex: 1 !important;
@@ -54,7 +54,7 @@ body{
 .f-info {
      text-align: center;
     display: flex;
-    height: 8rem;
+    height: 6rem;
     background-color: #ebebeb;
     flex-wrap: wrap;
     justify-content: center;
@@ -111,3 +111,64 @@ body{
     background-color: #fe424d;
     border: none;
 }
+
+/* show page  */
+
+.show-img{
+    height: 28vh;
+    /* width: 50vh !important; */
+}
+
+.btns{
+    display: flex;
+}
+
+
+.listing-details {
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+}
+
+.listing-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  color: #222;
+}
+
+.listing-description {
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 0.8rem;
+}
+
+.listing-price {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 0.8rem;
+}
+
+.currency-symbol {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.price-amount {
+  font-size: 1.4rem;
+}
+
+.per-night {
+  font-size: 0.9rem;
+  color: #717171;
+}
+
+.listing-location {
+  font-size: 0.9rem;
+  color: #717171;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
