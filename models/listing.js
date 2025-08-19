@@ -17,7 +17,7 @@ const listingSchema = new Schema({
         set: ((v)=> v === ""?"https://media.istockphoto.com/id/638202904/photo/palm-tree-on-the-beach.jpg?s=2048x2048&w=is&k=20&c=tl37uEKsM5TI1GS1uPShZg3OLuaCb8vZuwd51Noakyg=" : v)
     },
       },
-    price: String,
+    price: Number,
     location: String,
     country: String,
 })
