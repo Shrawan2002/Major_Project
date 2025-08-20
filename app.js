@@ -70,10 +70,18 @@ app.post("/listings",
     // let {title,description,image,price,location,country} = req.body;
     let listing = req.body.listing;
     if(!listing){
-        throw new ExpressError(400, "send valid data for listing");
+        next(new ExpressError(400, "send valid data for listing"));
     }
     console.log(listing);
     let newListing = new Listing(listing);
+
+    // first way is indivisual check the key exist ya not
+    if(!newListing.title){
+        throw new ExpressError(400, "title is missing");
+    }
+    if(!newListing.description){
+        throw new ExpressError(400, "description is missing");
+    }
     await newListing.save()
     res.redirect("/listings")
  
@@ -147,8 +155,8 @@ app.use((err,req,res,next)=>{
     // res.send("something went wrong");
     let {statusCode = 500, message = "something went wrong!"} = err;
     console.log(statusCode);
-    // res.status(statusCode).send(message);
-    res.status(statusCode).render("error.ejs",{message});
+    res.status(statusCode).send(message);
+    // res.status(statusCode).render("error.ejs",{message});
 })
 
 
