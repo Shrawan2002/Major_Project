@@ -7,7 +7,7 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
-const { wrap } = require("module");
+const listingSchema = require("./schema.js");
 
 app.use(express.static(path.join(__dirname,"/public")))
 app.engine("ejs",ejsMate);
@@ -69,19 +69,25 @@ app.post("/listings",
     async (req,res,next)=>{
     // let {title,description,image,price,location,country} = req.body;
     let listing = req.body.listing;
-    if(!listing){
-        next(new ExpressError(400, "send valid data for listing"));
-    }
-    console.log(listing);
+    
+    // if(!listing){
+    //     next(new ExpressError(400, "send valid data for listing"));
+    // }
+
+    // 2nd way to check all key is exist or not
+
+    let result = listingSchema.validate(req.body);
+    console.log(result);
     let newListing = new Listing(listing);
 
     // first way is indivisual check the key exist ya not
-    if(!newListing.title){
-        throw new ExpressError(400, "title is missing");
-    }
-    if(!newListing.description){
-        throw new ExpressError(400, "description is missing");
-    }
+
+    // if(!newListing.title){
+    //     throw new ExpressError(400, "title is missing");
+    // }
+    // if(!newListing.description){
+    //     throw new ExpressError(400, "description is missing");
+    // }
     await newListing.save()
     res.redirect("/listings")
  
@@ -117,6 +123,7 @@ app.put("/listings/:id",
     wrapAsync(
     async (req,res)=>{
     let {id} = req.params;
+    console.log(req.body.listing);
     if(!req.body.listing){
         throw new ExpressError(400, "send valid data for listing");
     }
