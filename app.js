@@ -16,6 +16,7 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
 app.use(express.urlencoded({extended:true}));
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
+app.use(express.json());
 
 main()
 .then(()=>{
@@ -68,6 +69,9 @@ app.post("/listings",
     async (req,res,next)=>{
     // let {title,description,image,price,location,country} = req.body;
     let listing = req.body.listing;
+    if(!listing){
+        throw new ExpressError(400, "send valid data for listing");
+    }
     console.log(listing);
     let newListing = new Listing(listing);
     await newListing.save()
@@ -105,6 +109,9 @@ app.put("/listings/:id",
     wrapAsync(
     async (req,res)=>{
     let {id} = req.params;
+    if(!req.body.listing){
+        throw new ExpressError(400, "send valid data for listing");
+    }
    await Listing.findByIdAndUpdate(id,{...req.body.listing});
    res.redirect(`/listings/${id}`);
 }))
@@ -134,11 +141,14 @@ app.all(/.*/, (req, res, next) => {
 
 
 
+// Error Handling Middlewares
+
 app.use((err,req,res,next)=>{
     // res.send("something went wrong");
-    let {statusCode, message} = err;
+    let {statusCode = 500, message = "something went wrong!"} = err;
     console.log(statusCode);
-    res.status(statusCode).send(message);
+    // res.status(statusCode).send(message);
+    res.status(statusCode).render("error.ejs",{message});
 })
 
 
