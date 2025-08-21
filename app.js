@@ -47,6 +47,17 @@ app.get("/testlisting",async (req,res)=>{
     res.send("successful testing");
 })
 
+// validation for schema convert into middleware
+const validateListing = (req,res,next)=>{
+    let {error} = listingSchema.validate(req.body);
+    if(error){
+        let errMsg = error.details.map((el) => el.message).join(",");
+        throw new ExpressError(400, errMsg);
+    }else{
+        next();  
+    }
+}
+
 //index Route
 app.get("/listings",
     wrapAsync(
@@ -65,7 +76,8 @@ app.get("/listings/new",(req,res)=>{
 
 //Create Route
 app.post("/listings", 
-    wrapAsync(
+    validateListing,
+    wrapAsync( 
     async (req,res,next)=>{
     // let {title,description,image,price,location,country} = req.body;
     let listing = req.body.listing;
@@ -76,11 +88,11 @@ app.post("/listings",
 
     // 2nd way to check all key is exist or not
 
-    let result = listingSchema.validate(req.body);
-    console.log(result);
-    if(result.error){
-        throw new ExpressError(400, result.error);
-    }
+    // let result = listingSchema.validate(req.body);
+    // console.log(result);
+    // if(result.error){
+    //     throw new ExpressError(400, result.error);
+    // }
     let newListing = new Listing(listing);
 
     // first way is indivisual check the key exist ya not
@@ -123,13 +135,16 @@ app.get("/listings/:id/edit",
 
 // Update Route
 app.put("/listings/:id",
+    validateListing,
     wrapAsync(
     async (req,res)=>{
     let {id} = req.params;
     console.log(req.body.listing);
-    if(!req.body.listing){
-        throw new ExpressError(400, "send valid data for listing");
-    }
+
+    // if(!req.body.listing){
+    //     throw new ExpressError(400, "send valid data for listing");
+    // }
+
    await Listing.findByIdAndUpdate(id,{...req.body.listing});
    res.redirect(`/listings/${id}`);
 }))
