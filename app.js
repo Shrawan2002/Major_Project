@@ -78,6 +78,9 @@ app.post("/listings",
 
     let result = listingSchema.validate(req.body);
     console.log(result);
+    if(result.error){
+        throw new ExpressError(400, result.error);
+    }
     let newListing = new Listing(listing);
 
     // first way is indivisual check the key exist ya not
@@ -162,8 +165,8 @@ app.use((err,req,res,next)=>{
     // res.send("something went wrong");
     let {statusCode = 500, message = "something went wrong!"} = err;
     console.log(statusCode);
-    res.status(statusCode).send(message);
-    // res.status(statusCode).render("error.ejs",{message});
+    // res.status(statusCode).send(message);
+    res.status(statusCode).render("error.ejs",{message});
 })
 
 
