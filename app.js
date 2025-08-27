@@ -139,7 +139,7 @@ app.put("/listings/:id",
     wrapAsync(
     async (req,res)=>{
     let {id} = req.params;
-    console.log(req.body.listing);
+    // console.log(req.body.listing);
 
     // if(!req.body.listing){
     //     throw new ExpressError(400, "send valid data for listing");
@@ -155,7 +155,7 @@ app.delete("/listings/:id",
     async(req,res)=>{
     let {id} = req.params;
      let deleteListing = await Listing.findByIdAndDelete(id);
-     console.log(deleteListing);
+    //  console.log(deleteListing);
     res.redirect("/listings");
 }))
 

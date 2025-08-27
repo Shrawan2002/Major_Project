@@ -3,7 +3,7 @@
  
 <div class="row mt-2">
     <div class="col-8 offset-3">
-        <h3>Listing Details :</h3>
+          <h5 class="listing-title"><%= listing.title %></h5>
     </div>
  <div class="card col-25 offset-3 show-card" style="width: 25rem;">
    <img src="<%= listing.image.url %>" 
@@ -22,7 +22,6 @@
   </div> -->
 
 <div class="card-body listing-details">
-  <h5 class="listing-title"><%= listing.title %></h5>
   <p class="listing-description"><%= listing.description %></p>
 
   <p class="listing-price">
