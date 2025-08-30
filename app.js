@@ -127,7 +127,7 @@ app.get("/listings/:id",
     wrapAsync(
     async (req,res)=>{
     let {id} = req.params;
-    const listing = await Listing.findById(id);
+    const listing = await Listing.findById(id).populate("reviews");
     res.render("listings/show.ejs",{listing});
     // console.log(listing);
 }))
@@ -186,6 +186,16 @@ app.post("/listings/:id/reviews",validateReview, wrapAsync(async(req,res)=>{
     // res.send("new review saved"); 
 
     res.redirect(`/listings/${listing._id}`);
+}))
+
+
+///Delete Route
+app.delete("/listings/:id/reviews/:reviewId", wrapAsync(async (req,res)=>{
+    let {id, reviewId} = req.params;
+
+    await Listing.findByIdAndUpdate(id, {$pull: {reviews: reviewId}});
+    await Review.findByIdAndDelete(reviewId);
+    res.redirect(`/listings/${id}`);
 }))
 
 //page not found
