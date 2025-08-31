@@ -61,8 +61,15 @@ const sessionOptions = {
 app.use(session(sessionOptions));
 
 app.get("/register", (req,res)=>{
-    let {name} = req.query;
-    res.send(name);
+    let {name = "anonymous"} = req.query;
+    req.session.name = name;
+    console.log(req.session.name); 
+    // res.send(name);
+    res.redirect("/hello");
+})
+
+app.get("/hello", (req,res)=>{
+    res.send(`hello, ${req.session.name}`);
 })
 
 
