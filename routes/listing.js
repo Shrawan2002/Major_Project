@@ -3,9 +3,7 @@ const wrapAsync = require("../utils/wrapAsync.js");
 const {listingSchema} = require("../schema.js")
 const Listing = require("../models/listing.js");
 const ExpressError = require("../utils/ExpressError.js");
-
 const router = express.Router(); 
-
 
 
 // Server Side validation for schema convert into middleware
