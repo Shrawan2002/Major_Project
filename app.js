@@ -8,6 +8,7 @@ const listings = require("./routes/listing.js");
 const reviews = require("./routes/review.js");
 const session = require("express-session");
 const ExpressError = require("./utils/ExpressError");
+const flash = require("connect-flash");
 
 
 app.use(express.static(path.join(__dirname,"/public")))
@@ -16,18 +17,10 @@ app.use(methodOverride("_method"))
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
 app.use(express.urlencoded({extended:true}));
-
-const sessionOptions = {
-    secret: "mysupersecretstring",
-    resave: false,
-    saveUninitialized: true
-}
-
-app.use(session(sessionOptions));
-
+app.use(express.json());
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
-app.use(express.json());
+
 
 main()
 .then(()=>{
@@ -39,6 +32,27 @@ main()
 async function main() {
     await mongoose.connect(MONGO_URL);
 }
+
+
+const sessionOptions = {
+    secret: "mysupersecretstring",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        httpOnly: true
+    }
+}
+
+app.use(session(sessionOptions));
+app.use(flash());
+
+app.use((req,res,next)=>{
+    res.locals.success = req.flash("success");
+    res.locals.error = req.flash("error");
+    next();
+})
 
 
 
@@ -79,6 +93,8 @@ app.get("/",(req,res)=>{
 //     console.log("➡️ Request URL:", req.url);
 //     next();
 // });
+
+// The error just means Chrome looked for a special debugging config file your server doesn’t have. Your app is fine.
 
 app.get('/.well-known/appspecific/com.chrome.devtools.json', (req, res) => {
   res.status(204).end(); // No Content, avoids 404 error
