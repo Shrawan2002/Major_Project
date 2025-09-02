@@ -51,6 +51,7 @@ const sessionOptions = {
 app.use(session(sessionOptions));
 app.use(flash());
 
+// iterations: specifies the number of iterations used in pbkdf2 hashing algorithm. Default: 25000
 app.use(passport.initialize());
 app.use(passport.session())
 passport.use(new LocalStrategy(User.authenticate()));
@@ -58,9 +59,19 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use((req,res,next)=>{
-    res.locals.success = req.flash("s     uccess");
+    res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     next();
+}) 
+
+
+app.get("/demouser", async (req,res)=>{
+    let fakeUser = new User({
+        email: "student@gmail.com",
+        username: "delta-student"
+    });
+    let registeredUser = await User.register(fakeUser, "helloworld");
+    res.send(registeredUser);
 })
 
 
