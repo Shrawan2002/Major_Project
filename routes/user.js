@@ -3,7 +3,11 @@ const router = express.Router();
 const User = require("../models/user.js");
 const wrapAsync = require("../utils/wrapAsync.js");
 const passport = require("passport");
+const {saveRedirectUrl} = require("../middleware.js");
 
+
+
+// signup route
 router.get("/signup", (req,res)=>{
     res.render("users/signup");
 })
@@ -14,8 +18,15 @@ router.post("/signup", wrapAsync(async (req,res)=>{
     let newUser = new User({email, username});
     const registeredUser = await User.register(newUser, password);
     console.log(registeredUser);
-    req.flash("success", "welcome to Wanderlust!");
-    res.redirect("/listings");
+    req.login(registeredUser,(err)=>{
+      if(err){
+        return next(err);
+      }
+      req.flash("success", "welcome to Wanderlust!");
+      res.redirect("/listings");
+    })
+    // req.flash("success", "welcome to Wanderlust!");
+    // res.redirect("/listings");
   }catch(err){
     req.flash("error", err.message);
     res.redirect("/signup"); 
@@ -29,17 +40,22 @@ router.get("/login", (req,res)=>{
     res.render("users/login.ejs");
 })
 
-router.post("/login", passport.authenticate("local",{
+// login ke bad passport by default req.session ke value ko reset kar deta hai
+router.post("/login",
+  saveRedirectUrl,
+  passport.authenticate("local",{
     failureRedirect: "/login", 
     failureFlash: true,
 }),
 async(req,res)=>{
     // res.send("welcome to wanderlust! You are logged in!");
     req.flash("success", "welcome back to Wanderlust!");
-    res.redirect("/listings");
+    let redirect =  res.locals.redirectUrl || "/listings"
+    res.redirect(redirect);
 }
 );
 
+// logout route
 router.get("/logout", (req, res, next)=>{
   req.logOut((err)=>{
     if(err){
