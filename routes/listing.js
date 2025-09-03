@@ -4,6 +4,7 @@ const {listingSchema} = require("../schema.js")
 const Listing = require("../models/listing.js");
 const ExpressError = require("../utils/ExpressError.js");
 const router = express.Router(); 
+const {isLoggedIn} = require("../middleware.js");// destructing
 
 
 // Server Side validation for schema convert into middleware
@@ -28,13 +29,15 @@ router.get("/",
 
 
 //new Route
-router.get("/new",(req,res)=>{
+router.get("/new", isLoggedIn,(req,res)=>{
+    console.log(req.user);
     res.render("listings/new.ejs");
     // console.log("new request");
 })
 
 //Create Route
 router.post("/", 
+    isLoggedIn,
     validateListing,
     wrapAsync( 
     async (req,res,next)=>{
@@ -90,6 +93,7 @@ router.get("/:id",
 //Edit Route
 
 router.get("/:id/edit",
+    isLoggedIn,
     wrapAsync(
     async (req,res)=>{
     let {id} = req.params;
@@ -103,6 +107,7 @@ router.get("/:id/edit",
 
 // Update Route
 router.put("/:id",
+    isLoggedIn,
     validateListing,
     wrapAsync(
     async (req,res)=>{
@@ -119,7 +124,8 @@ router.put("/:id",
 }))
 
 //Delete Route
-router.delete("/:id", 
+router.delete("/:id",
+    isLoggedIn, 
     wrapAsync(
     async(req,res)=>{
     let {id} = req.params;
@@ -128,6 +134,6 @@ router.delete("/:id",
     req.flash("success", "Listing Deleted!")
     res.redirect("/listings");
 }))
-
+ 
 
 module.exports = router;

@@ -22,6 +22,9 @@ router.post("/signup", wrapAsync(async (req,res)=>{
   }
 }));
 
+
+// login route
+
 router.get("/login", (req,res)=>{
     res.render("users/login.ejs");
 })
@@ -31,9 +34,21 @@ router.post("/login", passport.authenticate("local",{
     failureFlash: true,
 }),
 async(req,res)=>{
-    res.send("welcome to wanderlust! You are logged in!");
+    // res.send("welcome to wanderlust! You are logged in!");
+    req.flash("success", "welcome back to Wanderlust!");
+    res.redirect("/listings");
 }
 );
+
+router.get("/logout", (req, res, next)=>{
+  req.logOut((err)=>{
+    if(err){
+      return next(err);
+    }
+    req.flash("success", "you are logged out! ");
+    res.redirect("/listings");
+  })
+})
 
 
 
