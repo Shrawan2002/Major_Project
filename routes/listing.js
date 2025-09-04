@@ -65,6 +65,7 @@ router.post("/",
     // if(!newListing.description){
     //     throw new ExpressError(400, "description is missing");
     // }
+    newListing.owner = req.user._id;
     await newListing.save();
     req.flash("success", "New Listing Created!");
     res.redirect("/listings")
@@ -78,7 +79,10 @@ router.get("/:id",
     wrapAsync(
     async (req,res)=>{
     let {id} = req.params;
-    const listing = await Listing.findById(id).populate("reviews");
+    const listing = await Listing.findById(id)
+    .populate("reviews").
+    populate("owner");
+    // console.log(listing);
     if(!listing){
         req.flash("error", "Listing you requested for does not exist");
        return  res.redirect("/listings")
