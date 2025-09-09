@@ -6,17 +6,16 @@ const {saveRedirectUrl} = require("../middleware.js");
 const userController = require("../controllers/user.js");
 
 
-// signup route
-router.get("/signup", userController.renderSignupForm);
-router.post("/signup", wrapAsync(userController.signup));
+
+router.route("/signup")
+.get( userController.renderSignupForm)
+.post( wrapAsync(userController.signup));
 
 
-// login route
-
-router.get("/login", userController.renderLoginForm)
-
-// login ke bad passport by default req.session ke value ko reset kar deta hai
-router.post("/login",
+// login
+router.route("/login")
+.get(userController.renderLoginForm)
+.post(
   saveRedirectUrl,
   passport.authenticate("local",{
     failureRedirect: "/login", 
@@ -26,8 +25,33 @@ userController.login
 
 );
 
+
 // logout route
 router.get("/logout",userController.logout)
+
+  
+// signup route
+// router.get("/signup", userController.renderSignupForm);
+// router.post("/signup", wrapAsync(userController.signup));
+
+
+// login route
+
+// router.get("/login", userController.renderLoginForm)
+
+// login ke bad passport by default req.session ke value ko reset kar deta hai
+// router.post("/login",
+//   saveRedirectUrl,
+//   passport.authenticate("local",{
+//     failureRedirect: "/login", 
+//     failureFlash: true,
+// }),
+// userController.login
+
+// );
+
+// logout route
+// router.get("/logout",userController.logout)
 
 
 
