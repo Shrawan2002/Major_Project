@@ -17,9 +17,13 @@ module.exports.renderNewForm = (req,res)=>{
 
 module.exports.createListing =  async (req,res,next)=>{
     // let {title,description,image,price,location,country} = req.body;
+    let url = req.file.path;
+    let filename= req.file.filename;
+    console.log(url, "...", filename);
+
     let listing = req.body.listing;
-    
     let newListing = new Listing(listing);
+    newListing.image = {filename, url};
 
     // first way is indivisual check the key exist ya not
 
