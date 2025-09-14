@@ -118,7 +118,7 @@ app.get("/",(req,res)=>{
 // app.use((req, res, next) => {
 //     console.log("➡️ Request URL:", req.url);
 //     next();
-// });
+// }); 
 
 // The error just means Chrome looked for a special debugging config file your server doesn’t have. Your app is fine.
 

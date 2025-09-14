@@ -172,5 +172,8 @@ body{
   gap: 0.3rem;
 }
 
-
+#map { 
+   height: 400px;
+   width: 80vh; 
+}
 
