@@ -23,10 +23,13 @@
            <textarea name="listing[description]" required class="form-control"><%= listing.description %></textarea>
               <div class="invalid-feedback"> Please enter a short description</div>
         </div>
+          <div class="mb-3">
+            Original Listing Image <br/>
+            <img src="<%= originalImageUrl %>" />
+       </div>
         <div class="mb-3">
-           <label for="image" class="form-label">Image Link</label>
+           <label for="image" class="form-label">Upload new Image</label>
            <input  name="listing[image]"  type="file" class="form-control" />
-          <div class="invalid-feedback"> Upload New Image</div>
        </div>
        <div class="row">
         <div class="mb-3 col-md-6">
