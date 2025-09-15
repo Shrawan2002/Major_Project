@@ -1,5 +1,7 @@
 const Listing = require("../models/listing");
-
+const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
+const mapToken = process.env.MAP_TOKEN;
+const geocodingClient = mbxGeocoding({ accessToken: mapToken });
 
 
 module.exports.index = async (req,res)=>{
@@ -17,6 +19,15 @@ module.exports.renderNewForm = (req,res)=>{
 
 module.exports.createListing =  async (req,res,next)=>{
     // let {title,description,image,price,location,country} = req.body;
+
+   let response =  await geocodingClient.forwardGeocode({
+  query: req.body.listing.location,
+  limit: 1
+    })
+  .send();
+//   console.log(response.body.features[0].geometry);
+//   res.send("done!");
+
     let url = req.file.path;
     let filename= req.file.filename;
     console.log(url, "...", filename);
@@ -24,6 +35,8 @@ module.exports.createListing =  async (req,res,next)=>{
     let listing = req.body.listing;
     let newListing = new Listing(listing);
     newListing.image = {filename, url};
+
+    newListing.geometry = response.body.features[0].geometry;
 
     // first way is indivisual check the key exist ya not
 
@@ -75,7 +88,7 @@ module.exports.renderEditForm = async (req,res)=>{
 
 module.exports.updateListing = async (req,res)=>{
     let {id} = req.params;
-    // console.log(req.body.listing);
+    // console.log(req.body.listing); 
 
     // if(!req.body.listing){
     //     throw new ExpressError(400, "send valid data for listing");
