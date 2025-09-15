@@ -1,5 +1,9 @@
 
 <% layout("/layouts/boilerplate") %>
+<script>
+  // Without quotes, your browser will think pk.eyJ1Ijoi... (your token) is a JavaScript variable, not a string → and it will throw an error
+  let mapToken = "<%= process.env.MAP_TOKEN %>";
+</script>
  
 <div class="row mt-2">
     <div class="col-8 offset-3">
@@ -118,18 +122,8 @@
   <div id="map"></div>
 </div>
 </div>
+<script src="/js/map.js"></script>
 
-<script>
-  let mapToken = "<%= process.env.MAP_TOKEN %>";
-  console.log(mapToken); 
-
-    mapboxgl.accessToken = mapToken;
-    const map = new mapboxgl.Map({
-        container: 'map', // container ID
-        center: [ 77.2090, 28.6139], // starting position [lng, lat]. Note that lat must be set between -90 and 90
-        zoom: 9 // starting zoom
-    });
-</script>
 
 
 
