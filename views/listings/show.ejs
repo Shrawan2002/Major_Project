@@ -3,6 +3,9 @@
 <script>
   // Without quotes, your browser will think pk.eyJ1Ijoi... (your token) is a JavaScript variable, not a string → and it will throw an error
   let mapToken = "<%= process.env.MAP_TOKEN %>";
+  // JSON.stringify turns your JS object/array into a valid JSON string, which is also valid JavaScript.
+  // let coordinates = <%- JSON.stringify(listing.geometry.coordinates) %>;
+  let listing = <%- JSON.stringify(listing) %>;
 </script>
  
 <div class="row mt-2">
