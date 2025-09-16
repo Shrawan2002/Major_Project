@@ -88,9 +88,9 @@ app.use("/", userRouter);
 
 
 
-app.get("/",(req,res)=>{
-    res.send("Hi, I am root");
-});
+// app.get("/",(req,res)=>{
+//     res.send("Hi, I am root");
+// });
 
 // app.get("/testlisting",async (req,res)=>{
 //     let sampleListing = new Listing({
