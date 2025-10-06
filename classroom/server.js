@@ -79,9 +79,9 @@ app.get("/register", (req,res)=>{
     if(name === "anonymous"){
         req.flash("error", "user not registered")
     }else{
-        // req.flash("success", "user registered successfully!");
+        req.flash("success", "user registered successfully!");
     }
-    // res.redirect("/hello");
+    res.redirect("/hello");
 })
 
 // connect-flash works like a queue:
