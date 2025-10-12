@@ -6,21 +6,17 @@ const geocodingClient = mbxGeocoding({ accessToken: mapToken });
 
 module.exports.index = async (req,res)=>{
     const allListings = await Listing.find({});
-    // console.log(allListing)
     res.render("listings/index.ejs",{allListings});
 }
 
-module.exports.renderNewForm = (req,res)=>{
+module.exports.renderNewForm = (req, res)=>{
     console.log(req.user);
     res.render("listings/new.ejs");
-    // console.log("new request");
-}
-
+} 
 
 module.exports.createListing =  async (req,res,next)=>{
     // let {title,description,image,price,location,country} = req.body;
-
-   let response =  await geocodingClient.forwardGeocode({
+  let response =  await geocodingClient.forwardGeocode({
   query: req.body.listing.location,
   limit: 1
     })
@@ -69,7 +65,6 @@ module.exports.showListing = async (req,res)=>{
        return  res.redirect("/listings")
     }
     res.render("listings/show.ejs",{listing});
-    // console.log(listing);
 }
 
 module.exports.renderEditForm = async (req,res)=>{

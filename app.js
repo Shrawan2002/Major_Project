@@ -3,6 +3,7 @@ if(process.env.NODE_ENV != "production"){
 }
 const express = require("express"); 
 const app = express();
+const cors = require('cors');
 const mongoose = require("mongoose");
 const path = require("path");
 const methodOverride = require("method-override");
@@ -17,7 +18,15 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
 
+const corsOptions = {
+      origin: 'http://localhost:3000', // Allow requests only from this origin
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+      credentials: true, // Allow sending cookies/authorization headers
+      optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
+    };
 
+    app.use(cors(corsOptions));
+    
 app.use(express.static(path.join(__dirname,"/public")))
 app.engine("ejs",ejsMate);
 app.use(methodOverride("_method"))
