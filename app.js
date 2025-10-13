@@ -4,7 +4,6 @@ if(process.env.NODE_ENV != "production"){
 const express = require("express"); 
 const app = express();
 const cors = require('cors');
-const mongoose = require("mongoose");
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate"); 
@@ -17,15 +16,14 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
+const connectDB = require("./config/db.js");
 
 const corsOptions = {
-      origin: 'http://localhost:3000', // Allow requests only from this origin
-      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-      credentials: true, // Allow sending cookies/authorization headers
-      optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
+  origin: "http://localhost:3000", // React frontend
+  credentials: true,
     };
 
-    app.use(cors(corsOptions));
+app.use(cors(corsOptions));
     
 app.use(express.static(path.join(__dirname,"/public")))
 app.engine("ejs",ejsMate);
@@ -35,17 +33,8 @@ app.set("views", path.join(__dirname, "/views"));
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 
-const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
-main()
-.then(()=>{
-    console.log("connected to DB");
-}).catch((err)=>{
-    console.log(err);
-})
 
-async function main() {
-    await mongoose.connect(MONGO_URL);
-}
+connectDB();
 
 
 const sessionOptions = {
@@ -77,50 +66,9 @@ app.use((req,res,next)=>{
 }) 
  
 
-// app.get("/demouser", async (req,res)=>{
-//     let fakeUser = new User({
-//         email: "student@gmail.com",
-//         username: "delta-student"
-//     });
-//     let registeredUser = await User.register(fakeUser, "helloworld");
-//     res.send(registeredUser);
-// })
-
-
-
-app.use("/listings", listingRouter);
-app.use("/listings/:id/reviews",reviewRouter);
-app.use("/", userRouter);
-
-
-
-
-// app.get("/",(req,res)=>{
-//     res.send("Hi, I am root");
-// });
-
-// app.get("/testlisting",async (req,res)=>{
-//     let sampleListing = new Listing({
-//         title: "My New Villa",
-//         description: "By the Beach",
-//         price: 1200,
-//         location: "calangute, Goa",
-//         country: "india"  
-//     });
-
-//     await sampleListing.save();
-//     console.log(" sample was saved");
-//     res.send("successful testing");
-// })
-
-
-
-
-//page not found
-// app.all("*", (req,res,next)=>{
-//     next(new ExpressError(404, "page Not Found!"));
-// })
-
+app.use("/api/listings", listingRouter);
+app.use("/api/listings/:id/reviews",reviewRouter);
+app.use("/api", userRouter);
 
 // app.use((req, res, next) => {
 //     console.log("➡️ Request URL:", req.url);
